@@ -128,14 +128,15 @@ public class TaggerTask extends AsyncTask<Object, Integer, Boolean> {
                 if (tagUpdate.hasChanged()) {
 
                     if (TaggerUtils.requiresPermission(applicationContext, paths)) {
-                        temp = new File(applicationContext.getFilesDir(), orig.getName());
+                       
+                        if (tag != null) {
+                             temp = new File(applicationContext.getFilesDir(), orig.getName());
                         tempFiles.add(temp);
                         TaggerUtils.copyFile(orig, temp);
 
                         audioFile = AudioFileIO.read(temp);
                         tag = audioFile.getTag();
-                        if (tag == null) {
-                            break;
+                            
                         }
                     }
 
