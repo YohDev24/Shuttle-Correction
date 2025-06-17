@@ -126,7 +126,10 @@ public class HttpServer {
                         long contentLength = end - start + 1;
                         cleanupAudioStream();
                         audioInputStream = new FileInputStream(file);
-                        audioInputStream.skip(start);
+                        long skipped = audioInputStream.skip(start);
+                        if (skipped < start) {
+                            throw new IOException("Impossible de sauter jusqu’à la position " + start + " dans le fichier audio. Seulement " + skipped + " octets ignorés.");
+                        }
                         Response response = newFixedLengthResponse(Response.Status.PARTIAL_CONTENT, getMimeType(audioFileToServe), audioInputStream, contentLength);
                         response.addHeader("Content-Length", contentLength + "");
                         response.addHeader("Content-Range", "bytes " + start + "-" + end + "/" + fileLength);
