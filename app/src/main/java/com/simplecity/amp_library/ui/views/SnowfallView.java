@@ -156,7 +156,7 @@ public class SnowfallView extends View {
         if (snowflakes.size() <= TOTAL_FLAKES) {
 
             int flakesToAdd = Math.min(10 + snowRng.nextInt(FLAKE_INCREMENT), TOTAL_FLAKES - snowflakes.size());
-            if (flakesToAdd > 0) {
+            if (!flakesToAdd.isEmpty()) {
                 addSnow(flakesToAdd);
                 snowHandler.postDelayed(this::generateSnow, SNOWFALL_TIME_INCREMENT);
             }
