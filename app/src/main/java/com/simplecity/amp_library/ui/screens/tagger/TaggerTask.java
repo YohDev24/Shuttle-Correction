@@ -128,15 +128,14 @@ public class TaggerTask extends AsyncTask<Object, Integer, Boolean> {
                 if (tagUpdate.hasChanged()) {
 
                     if (TaggerUtils.requiresPermission(applicationContext, paths)) {
-                       
-                        if (tag != null) {
-                             temp = new File(applicationContext.getFilesDir(), orig.getName());
+                        temp = new File(applicationContext.getFilesDir(), orig.getName());
                         tempFiles.add(temp);
                         TaggerUtils.copyFile(orig, temp);
 
                         audioFile = AudioFileIO.read(temp);
                         tag = audioFile.getTag();
-                            
+                        if (tag == null) {
+                            break;
                         }
                     }
 
@@ -181,7 +180,7 @@ public class TaggerTask extends AsyncTask<Object, Integer, Boolean> {
     }
 
     @Override
-    protected void onPostExecute(Boolean success) {
+    protected void onPostExecute(boolean success) {
 
         if (tagCompletionListener != null) {
             if (success) {
