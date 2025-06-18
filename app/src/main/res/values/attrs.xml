@@ -119,7 +119,7 @@
     <!--<declare-styleable name="Switchy">-->
     <!--<attr name="switchStyle" format="reference" />-->
     <!--<attr name="switchPreferenceStyle" format="reference" />-->
-    <!--</declare-styleable>-->
+    <!--</declare-styleable&>-->
     <declare-styleable name="Android">
 
         <!-- Text color. -->
