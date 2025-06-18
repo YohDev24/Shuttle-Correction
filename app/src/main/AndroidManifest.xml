@@ -195,6 +195,8 @@
         <activity
             android:name=".ui.widgets.WidgetConfigureActivityMedium"
             android:theme="@style/WallpaperTheme">
+
+
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
             </intent-filter>
@@ -203,7 +205,9 @@
         <!-- Config Activity for extra large Widget -->
         <activity
             android:name=".ui.widgets.WidgetConfigureActivityExtraLarge"
-            android:theme="@style/WallpaperTheme">
+            android:theme="@style/WallpaperTheme"
+            android:exported="true">
+            
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
             </intent-filter>
@@ -225,7 +229,8 @@
         <!-- Config Activity for small Widget -->
         <activity
             android:name=".ui.widgets.WidgetConfigureActivitySmall"
-            android:theme="@style/WallpaperTheme">
+            android:theme="@style/WallpaperTheme"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
             </intent-filter>

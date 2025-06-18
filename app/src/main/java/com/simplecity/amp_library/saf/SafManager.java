@@ -217,11 +217,7 @@ public class SafManager {
                             Log.w(TAG, "Unexpected external file dir: " + file.getAbsolutePath());
                         } else {
                             String path = file.getAbsolutePath().substring(0, index);
-                            try {
-                                path = new File(path).getCanonicalPath();
-                            } catch (IOException e) {
-                                // Keep non-canonical path.
-                            }
+                            path = getCanonicalPathSafe(path);
                             paths.add(path);
                         }
                     }
@@ -232,6 +228,15 @@ public class SafManager {
         }
         return paths;
     }
+
+        private String getCanonicalPathSafe(String path) {
+            try {
+                return new File(path).getCanonicalPath();
+            } catch (IOException e) {
+                // Keep non-canonical path
+                return path;
+            }
+        }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void openDocumentTreePicker(Activity activity) {
