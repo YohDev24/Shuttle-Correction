@@ -16,7 +16,7 @@ public class CustomGlideModule implements GlideModule {
 
     @Override
     public void applyOptions(Context context, GlideBuilder builder) {
-
+    // No custom options needed for Glide in this module
     }
 
     @Override

@@ -627,67 +627,61 @@ public final class CustomCollapsingTextHelper {
         final float collapsedWidth = mCollapsedBounds.width();
         final float expandedWidth = mExpandedBounds.width();
 
-        final float availableWidth;
         final float newTextSize;
+        final float availableWidth;
         boolean updateDrawText = false;
 
         if (isClose(textSize, mCollapsedTextSize)) {
             newTextSize = mCollapsedTextSize;
             mScale = 1f;
-            if (mCurrentTypeface != mCollapsedTypeface) {
-                mCurrentTypeface = mCollapsedTypeface;
-                updateDrawText = true;
-            }
+            updateDrawText = updateTypefaceIfNeeded(mCollapsedTypeface);
             availableWidth = collapsedWidth;
         } else {
             newTextSize = mExpandedTextSize;
-            if (mCurrentTypeface != mExpandedTypeface) {
-                mCurrentTypeface = mExpandedTypeface;
-                updateDrawText = true;
-            }
-            if (isClose(textSize, mExpandedTextSize)) {
-                // If we're close to the expanded text size, snap to it and use a scale of 1
-                mScale = 1f;
-            } else {
-                // Else, we'll scale down from the expanded text size
-                mScale = textSize / mExpandedTextSize;
-            }
+            updateDrawText = updateTypefaceIfNeeded(mExpandedTypeface);
+
+            mScale = isClose(textSize, mExpandedTextSize)
+                    ? 1f
+                    : textSize / mExpandedTextSize;
 
             final float textSizeRatio = mCollapsedTextSize / mExpandedTextSize;
-            // This is the size of the expanded bounds when it is scaled to match the
-            // collapsed text size
             final float scaledDownWidth = expandedWidth * textSizeRatio;
 
-            if (scaledDownWidth > collapsedWidth) {
-                // If the scaled down size is larger than the actual collapsed width, we need to
-                // cap the available width so that when the expanded text scales down, it matches
-                // the collapsed width
-                availableWidth = Math.min(collapsedWidth / textSizeRatio, expandedWidth);
-            } else {
-                // Otherwise we'll just use the expanded width
-                availableWidth = expandedWidth;
-            }
+            availableWidth = (scaledDownWidth > collapsedWidth)
+                    ? Math.min(collapsedWidth / textSizeRatio, expandedWidth)
+                    : expandedWidth;
         }
 
         if (availableWidth > 0) {
-            updateDrawText = (mCurrentTextSize != newTextSize) || mBoundsChanged || updateDrawText;
+            updateDrawText = updateDrawText || (mCurrentTextSize != newTextSize) || mBoundsChanged;
             mCurrentTextSize = newTextSize;
             mBoundsChanged = false;
         }
 
         if (mTextToDraw == null || updateDrawText) {
-            mTitlePaint.setTextSize(mCurrentTextSize);
-            mTitlePaint.setTypeface(mCurrentTypeface);
-            // Use linear text scaling if we're scaling the canvas
-            mTitlePaint.setLinearText(mScale != 1f);
+            prepareDrawText(availableWidth);
+        }
+    }
 
-            // If we don't currently have text to draw, or the text size has changed, ellipsize...
-            final CharSequence title = TextUtils.ellipsize(mText, mTitlePaint,
-                    availableWidth, TextUtils.TruncateAt.END);
-            if (!TextUtils.equals(title, mTextToDraw)) {
-                mTextToDraw = title;
-                mIsRtl = calculateIsRtl(mTextToDraw);
-            }
+    private boolean updateTypefaceIfNeeded(Typeface typeface) {
+        if (mCurrentTypeface != typeface) {
+            mCurrentTypeface = typeface;
+            return true;
+        }
+        return false;
+    }
+
+    private void prepareDrawText(float availableWidth) {
+        mTitlePaint.setTextSize(mCurrentTextSize);
+        mTitlePaint.setTypeface(mCurrentTypeface);
+        mTitlePaint.setLinearText(mScale != 1f);
+
+        final CharSequence title = TextUtils.ellipsize(mText, mTitlePaint,
+                availableWidth, TextUtils.TruncateAt.END);
+
+        if (!TextUtils.equals(title, mTextToDraw)) {
+            mTextToDraw = title;
+            mIsRtl = calculateIsRtl(mTextToDraw);
         }
     }
 
