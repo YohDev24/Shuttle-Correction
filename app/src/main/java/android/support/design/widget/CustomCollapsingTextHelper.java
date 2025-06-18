@@ -621,69 +621,69 @@ public final class CustomCollapsingTextHelper {
     }
     //endregion
 
-    private void calculateUsingTextSize(final float textSize) {
-        if (mText == null) return;
+private void calculateUsingTextSize(final float textSize) {
+    if (mText == null) return;
 
-        final float collapsedWidth = mCollapsedBounds.width();
-        final float expandedWidth = mExpandedBounds.width();
+    final float collapsedWidth = mCollapsedBounds.width();
+    final float expandedWidth = mExpandedBounds.width();
 
-        final float newTextSize;
-        final float availableWidth;
-        boolean updateDrawText = false;
+    final float newTextSize;
+    final float availableWidth;
+    boolean updateDrawText = false;
 
-        if (isClose(textSize, mCollapsedTextSize)) {
-            newTextSize = mCollapsedTextSize;
-            mScale = 1f;
-            updateDrawText = updateTypefaceIfNeeded(mCollapsedTypeface);
-            availableWidth = collapsedWidth;
-        } else {
-            newTextSize = mExpandedTextSize;
-            updateDrawText = updateTypefaceIfNeeded(mExpandedTypeface);
+    if (isClose(textSize, mCollapsedTextSize)) {
+        newTextSize = mCollapsedTextSize;
+        mScale = 1f;
+        updateDrawText = updateTypefaceIfNeeded(mCollapsedTypeface);
+        availableWidth = collapsedWidth;
+    } else {
+        newTextSize = mExpandedTextSize;
+        updateDrawText = updateTypefaceIfNeeded(mExpandedTypeface);
 
-            mScale = isClose(textSize, mExpandedTextSize)
-                    ? 1f
-                    : textSize / mExpandedTextSize;
+        mScale = isClose(textSize, mExpandedTextSize)
+                ? 1f
+                : textSize / mExpandedTextSize;
 
-            final float textSizeRatio = mCollapsedTextSize / mExpandedTextSize;
-            final float scaledDownWidth = expandedWidth * textSizeRatio;
+        final float textSizeRatio = mCollapsedTextSize / mExpandedTextSize;
+        final float scaledDownWidth = expandedWidth * textSizeRatio;
 
-            availableWidth = (scaledDownWidth > collapsedWidth)
-                    ? Math.min(collapsedWidth / textSizeRatio, expandedWidth)
-                    : expandedWidth;
-        }
-
-        if (availableWidth > 0) {
-            updateDrawText = updateDrawText || (mCurrentTextSize != newTextSize) || mBoundsChanged;
-            mCurrentTextSize = newTextSize;
-            mBoundsChanged = false;
-        }
-
-        if (mTextToDraw == null || updateDrawText) {
-            prepareDrawText(availableWidth);
-        }
+        availableWidth = (scaledDownWidth > collapsedWidth)
+                ? Math.min(collapsedWidth / textSizeRatio, expandedWidth)
+                : expandedWidth;
     }
 
-    private boolean updateTypefaceIfNeeded(Typeface typeface) {
-        if (mCurrentTypeface != typeface) {
-            mCurrentTypeface = typeface;
-            return true;
-        }
-        return false;
+    if (availableWidth > 0) {
+        updateDrawText = updateDrawText || (mCurrentTextSize != newTextSize) || mBoundsChanged;
+        mCurrentTextSize = newTextSize;
+        mBoundsChanged = false;
     }
 
-    private void prepareDrawText(float availableWidth) {
-        mTitlePaint.setTextSize(mCurrentTextSize);
-        mTitlePaint.setTypeface(mCurrentTypeface);
-        mTitlePaint.setLinearText(mScale != 1f);
-
-        final CharSequence title = TextUtils.ellipsize(mText, mTitlePaint,
-                availableWidth, TextUtils.TruncateAt.END);
-
-        if (!TextUtils.equals(title, mTextToDraw)) {
-            mTextToDraw = title;
-            mIsRtl = calculateIsRtl(mTextToDraw);
-        }
+    if (mTextToDraw == null || updateDrawText) {
+        prepareDrawText(availableWidth);
     }
+}
+
+private boolean updateTypefaceIfNeeded(Typeface typeface) {
+    if (mCurrentTypeface != typeface) {
+        mCurrentTypeface = typeface;
+        return true;
+    }
+    return false;
+}
+
+private void prepareDrawText(float availableWidth) {
+    mTitlePaint.setTextSize(mCurrentTextSize);
+    mTitlePaint.setTypeface(mCurrentTypeface);
+    mTitlePaint.setLinearText(mScale != 1f);
+
+    final CharSequence title = TextUtils.ellipsize(mText, mTitlePaint,
+            availableWidth, TextUtils.TruncateAt.END);
+
+    if (!TextUtils.equals(title, mTextToDraw)) {
+        mTextToDraw = title;
+        mIsRtl = calculateIsRtl(mTextToDraw);
+    }
+}
 
     private void calculateUsingSubSize(final float subSize) {
         if (mSub == null) return;

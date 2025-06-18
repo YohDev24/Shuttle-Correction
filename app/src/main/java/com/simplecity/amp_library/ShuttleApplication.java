@@ -101,10 +101,10 @@ public class ShuttleApplication extends DaggerApplication {
             // You should not init your app in this process.
             return;
         }
+        if (BuildConfig.DEBUG) {
 
-        // Todo: Remove for production builds. Useful for tracking down crashes in beta.
-        RxDogTag.install();
-
+            RxDogTag.install();
+        }
         if (BuildConfig.DEBUG) {
              enableStrictMode();
         }
