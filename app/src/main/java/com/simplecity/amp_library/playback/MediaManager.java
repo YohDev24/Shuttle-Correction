@@ -36,7 +36,7 @@ public class MediaManager {
     private PlaylistDefs() {
         // Prevent instantiation
     }
-}
+    }
 
     private AnalyticsManager analyticsManager;
 
@@ -89,12 +89,13 @@ public class MediaManager {
                         songs -> shuffleAll(songs, onEmpty),
                         e -> LogUtils.logException(TAG, "Shuffle all error", e));
     }
+    private static final Random RANDOM = new Random();
 
     public void shuffleAll(@NotNull List<Song> songs, @NotNull Function0<Unit> onEmpty) {
         analyticsManager.dropBreadcrumb(TAG, "shuffleAll()");
         setShuffleMode(QueueManager.ShuffleMode.ON);
         if (!songs.isEmpty()) {
-            playAll(songs, new Random().nextInt(songs.size()), false, onEmpty);
+            playAll(songs, RANDOM.nextInt(songs.size()), false, onEmpty);
         }
     }
 
