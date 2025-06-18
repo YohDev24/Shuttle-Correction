@@ -1238,11 +1238,16 @@ public class CustomCollapsingToolbarLayout extends FrameLayout {
                 switch (lp.mCollapseMode) {
                     case LayoutParams.COLLAPSE_MODE_PIN:
                         offsetHelper.setTopAndBottomOffset(
-                                MathUtils.clamp(-verticalOffset, 0, getMaxOffsetForPinChild(child)));
+                            MathUtils.clamp(-verticalOffset, 0, getMaxOffsetForPinChild(child)));
                         break;
+
                     case LayoutParams.COLLAPSE_MODE_PARALLAX:
                         offsetHelper.setTopAndBottomOffset(
-                                Math.round(-verticalOffset * lp.mParallaxMult));
+                            Math.round(-verticalOffset * lp.mParallaxMult));
+                        break;
+
+                    default:
+                        Log.w(TAG, "Unknown collapse mode: " + lp.mCollapseMode);
                         break;
                 }
             }
