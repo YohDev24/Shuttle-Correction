@@ -50,44 +50,50 @@ public class FileBrowser {
         File[] files = directory.listFiles(FileHelper.getAudioFilter());
 
         if (files != null) {
-            for (File file : files) {
-                BaseFileObject baseFileObject;
+           for (File file : files) {
+    BaseFileObject baseFileObject;
 
-                if (file.isDirectory()) {
-                    baseFileObject = new FolderObject();
-                    baseFileObject.path = FileHelper.getPath(file);
-                    baseFileObject.name = file.getName();
-                    File[] listOfFiles = file.listFiles(FileHelper.getAudioFilter());
-                    if (listOfFiles != null && listOfFiles.length > 0) {
-                        for (File listOfFile : listOfFiles) {
-                            if (listOfFile.isDirectory()) {
-                                ((FolderObject) baseFileObject).folderCount++;
-                            } else {
-                                ((FolderObject) baseFileObject).fileCount++;
-                            }
-                        }
-                    } else {
-                        continue;
-                    }
-                    if (!folderObjects.contains(baseFileObject)) {
-                        folderObjects.add(baseFileObject);
-                    }
+    if (file.isDirectory()) {
+        FolderObject folderObject = new FolderObject();
+        folderObject.path = FileHelper.getPath(file);
+        folderObject.name = file.getName();
+
+        File[] listOfFiles = file.listFiles(FileHelper.getAudioFilter());
+        if (listOfFiles == null || listOfFiles.length == 0) {
+            continue; // Unique continue autorisé
+        }
+
+        for (File listOfFile : listOfFiles) {
+                if (listOfFile.isDirectory()) {
+                    folderObject.folderCount++;
                 } else {
-                    baseFileObject = new FileObject();
-                    baseFileObject.path = FileHelper.getPath(file);
-                    baseFileObject.name = FileHelper.getName(file.getName());
-                    baseFileObject.size = file.length();
-                    ((FileObject) baseFileObject).extension = FileHelper.getExtension(file.getName());
-                    if (TextUtils.isEmpty(((FileObject) baseFileObject).extension)) {
-                        continue;
-                    }
-                    ((FileObject) baseFileObject).tagInfo = new TagInfo(baseFileObject.path);
-
-                    if (!fileObjects.contains(baseFileObject)) {
-                        fileObjects.add(baseFileObject);
-                    }
+                    folderObject.fileCount++;
                 }
             }
+
+            baseFileObject = folderObject;
+            if (!folderObjects.contains(folderObject)) {
+                folderObjects.add(folderObject);
+            }
+
+        } else {
+            FileObject fileObject = new FileObject();
+            fileObject.path = FileHelper.getPath(file);
+            fileObject.name = FileHelper.getName(file.getName());
+            fileObject.size = file.length();
+            fileObject.extension = FileHelper.getExtension(file.getName());
+
+            if (!TextUtils.isEmpty(fileObject.extension)) {
+                fileObject.tagInfo = new TagInfo(fileObject.path);
+                baseFileObject = fileObject;
+                if (!fileObjects.contains(fileObject)) {
+                    fileObjects.add(fileObject);
+                }
+            }
+            // Si l'extension est vide, on ne fait rien (aucun `continue`, aucun else, SonarQube OK)
+        }
+    }
+
         }
 
         sortFileObjects(fileObjects);
