@@ -89,14 +89,14 @@ public class HttpServer {
             String uri = session.getUri();
             if (uri.contains("audio")) {
                 try {
-                    File file = new File(audioFileToServe);
+                        File file = new File(audioFileToServe);
 
-                    Map<String, String> headers = session.getHeaders();
-                    String range = null;
-                    for (String key : headers.keySet()) {
-                        if ("range".equals(key)) {
-                            range = headers.get(key);
-                        }
+                        Map<String, String> headers = session.getHeaders();
+                        String range = null;
+                        for (Map.Entry<String, String> entry : headers.entrySet()) {
+                            if ("range".equals(entry.getKey())) {
+                            range = entry.getValue();
+                            }
                     }
 
                     if (range == null) {
