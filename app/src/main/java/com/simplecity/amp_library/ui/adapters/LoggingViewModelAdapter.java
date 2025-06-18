@@ -1,4 +1,4 @@
-package com.simplecity.amp_library.ui.adapters;
+package com.simplecity.amp_library.glide.utils;
 
 import android.support.annotation.Nullable;
 import android.util.Log;
