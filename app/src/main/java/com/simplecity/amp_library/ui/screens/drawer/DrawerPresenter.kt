@@ -57,7 +57,7 @@ constructor(
     }
 
     private fun loadData(drawerView: DrawerView) {
-        PermissionUtils.RequestStoragePermissions {
+        PermissionUtils.requestStoragePermissions {
             addDisposable(playlistsRepository.getAllPlaylists(songsRepository)
                 .observeOn(AndroidSchedulers.mainThread())
                 // Delay the subscription so we're not querying data while the app is launching

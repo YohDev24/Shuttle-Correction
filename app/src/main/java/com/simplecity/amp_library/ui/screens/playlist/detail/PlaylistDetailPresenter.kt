@@ -83,7 +83,7 @@ class PlaylistDetailPresenter @AssistedInject constructor(
     }
 
     fun loadData() {
-        PermissionUtils.RequestStoragePermissions {
+        PermissionUtils.requestStoragePermissions {
             addDisposable(
                 songsRepository.getSongs(playlist)
                     .map { it.toMutableList() }

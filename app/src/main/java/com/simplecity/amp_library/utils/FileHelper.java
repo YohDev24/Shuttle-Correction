@@ -284,7 +284,7 @@ public class FileHelper {
      * @return true if the deletion was successful
      */
     public static boolean deleteFile(File file) {
-        return DeleteRecursive(file);
+        return deleteRecursive(file);
     }
 
     /**
@@ -293,14 +293,14 @@ public class FileHelper {
      * @param fileOrDirectory the file or directory to delete
      * @return true id the deletion was successful
      */
-    private static boolean DeleteRecursive(File fileOrDirectory) {
+    private static boolean deleteRecursive(File fileOrDirectory) {
         if (fileOrDirectory == null) {
             return false;
         } else if (fileOrDirectory.isDirectory()) {
             File[] fileList = fileOrDirectory.listFiles();
             if (fileList != null) {
                 for (File child : fileList)
-                    DeleteRecursive(child);
+                    deleteRecursive(child);
             }
         }
         return fileOrDirectory.delete();

@@ -283,7 +283,7 @@ class QueueFragment :
 
     override fun setData(queueItems: List<QueueItem>, position: Int) {
 
-        PermissionUtils.RequestStoragePermissions {
+        PermissionUtils.requestStoragePermissions {
             if (activity != null && isAdded) {
                 loadDataDisposable?.dispose()
 

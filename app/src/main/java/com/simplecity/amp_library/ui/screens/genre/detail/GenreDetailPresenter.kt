@@ -92,7 +92,7 @@ class GenreDetailPresenter @AssistedInject constructor(
     }
 
     fun loadData() {
-        PermissionUtils.RequestStoragePermissions {
+        PermissionUtils.requestStoragePermissions {
             addDisposable(
                 genre.getSongsObservable(context)
                     .zipWith<MutableList<Album>, Pair<MutableList<Album>, MutableList<Song>>>(
