@@ -92,19 +92,20 @@ public class TaggerTask extends AsyncTask<Object, Integer, Boolean> {
 
         boolean requiresPermission = TaggerUtils.requiresPermission(applicationContext, paths);
 
-        for (int i = 0; i < paths.size(); i++) {
+        boolean shouldStop = false;
+
+        for (int i = 0; i < paths.size() && !shouldStop; i++) {
             final String path = paths.get(i);
             try {
-
                 File orig = new File(path);
                 AudioFile audioFile = AudioFileIO.read(orig);
                 Tag tag = audioFile.getTag();
                 if (tag == null) {
-                    break;
+                    shouldStop = true;
+                    continue;
                 }
 
                 TagUpdate tagUpdate = new TagUpdate(tag);
-
                 tagUpdate.softSetArtist(artistText);
                 tagUpdate.softSetAlbumArtist(albumArtistText);
                 tagUpdate.softSetGenre(genreText);
@@ -126,7 +127,6 @@ public class TaggerTask extends AsyncTask<Object, Integer, Boolean> {
 
                 File temp = null;
                 if (tagUpdate.hasChanged()) {
-
                     if (TaggerUtils.requiresPermission(applicationContext, paths)) {
                         temp = new File(applicationContext.getFilesDir(), orig.getName());
                         tempFiles.add(temp);
@@ -135,7 +135,8 @@ public class TaggerTask extends AsyncTask<Object, Integer, Boolean> {
                         audioFile = AudioFileIO.read(temp);
                         tag = audioFile.getTag();
                         if (tag == null) {
-                            break;
+                            shouldStop = true;
+                            continue;
                         }
                     }
 
@@ -145,16 +146,15 @@ public class TaggerTask extends AsyncTask<Object, Integer, Boolean> {
                     if (requiresPermission && temp != null) {
                         DocumentFile documentFile = documentFiles.get(i);
                         if (documentFile != null) {
-                            ParcelFileDescriptor pfd = applicationContext.getContentResolver().openFileDescriptor(documentFile.getUri(), "w");
+                            ParcelFileDescriptor pfd = applicationContext.getContentResolver()
+                                    .openFileDescriptor(documentFile.getUri(), "w");
                             if (pfd != null) {
                                 FileOutputStream fileOutputStream = new FileOutputStream(pfd.getFileDescriptor());
                                 TaggerUtils.copyFile(temp, fileOutputStream);
                                 pfd.close();
                             }
-                            if (temp.delete()) {
-                                if (tempFiles.contains(temp)) {
-                                    tempFiles.remove(temp);
-                                }
+                            if (temp.delete() && tempFiles.contains(temp)) {
+                                tempFiles.remove(temp);
                             }
                         }
                     }
@@ -162,10 +162,10 @@ public class TaggerTask extends AsyncTask<Object, Integer, Boolean> {
 
                 publishProgress(i);
                 success = true;
-            } catch (CannotWriteException | IOException | CannotReadException | InvalidAudioFrameException | TagException | ReadOnlyFileException e) {
+            } catch (CannotWriteException | IOException | CannotReadException |
+                    InvalidAudioFrameException | TagException | ReadOnlyFileException e) {
                 e.printStackTrace();
             } finally {
-                //Try to clean up our temp files
                 if (tempFiles != null && !tempFiles.isEmpty()) {
                     for (int j = tempFiles.size() - 1; j >= 0; j--) {
                         File file = tempFiles.get(j);
