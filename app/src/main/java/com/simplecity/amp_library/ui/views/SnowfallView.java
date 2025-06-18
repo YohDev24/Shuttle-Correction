@@ -180,7 +180,7 @@ public class SnowfallView extends View {
     }
 
     public void removeSnow() {
-        if (snowflakes.size() > 0) {
+        if (!snowflakes.isEmpty()) {
             snowHandler.removeCallbacksAndMessages(null);
             for (Snowflake snowflake : snowflakes) {
                 snowflake.shouldRemove = true;
