@@ -92,7 +92,6 @@ public class TaggerTask extends AsyncTask<Object, Integer, Boolean> {
 
         boolean requiresPermission = TaggerUtils.requiresPermission(applicationContext, paths);
 
-        boolean shouldStop = false;
 
         boolean shouldProcess = true;
 
@@ -177,11 +176,13 @@ public class TaggerTask extends AsyncTask<Object, Integer, Boolean> {
                 e.printStackTrace();
             } finally {
                 if (tempFiles != null && !tempFiles.isEmpty()) {
-                    for (int j = tempFiles.size() - 1; j >= 0; j--) {
-                        File file = tempFiles.get(j);
+                  ListIterator<File> iterator = tempFiles.listIterator(tempFiles.size());
+                    while (iterator.hasPrevious()) {
+                        File file = iterator.previous();
                         file.delete();
-                        tempFiles.remove(j);
+                        iterator.remove();
                     }
+
                 }
             }
         }
