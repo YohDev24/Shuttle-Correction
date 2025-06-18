@@ -29,11 +29,11 @@ object AlbumMenuUtils {
     fun getAlbumMenuClickListener(selectedAlbums: Single<List<Album>>, callbacks: AlbumsMenuCallbacks): Toolbar.OnMenuItemClickListener {
         return Toolbar.OnMenuItemClickListener { item ->
             when (item.itemId) {
-                Defs.NEW_PLAYLIST -> {
+                PlaylistDefs.NEW_PLAYLIST -> {
                     callbacks.createPlaylistFromAlbums(selectedAlbums)
                     return@OnMenuItemClickListener true
                 }
-                Defs.PLAYLIST_SELECTED -> {
+                PlaylistDefs.PLAYLIST_SELECTED -> {
                     callbacks.addAlbumsToPlaylist(item.intent.getSerializableExtra(PlaylistManager.ARG_PLAYLIST) as Playlist, selectedAlbums)
                     return@OnMenuItemClickListener true
                 }
@@ -65,11 +65,11 @@ object AlbumMenuUtils {
                     callbacks.playAlbumsNext(album)
                     return@OnMenuItemClickListener true
                 }
-                Defs.NEW_PLAYLIST -> {
+                PlaylistDefs.NEW_PLAYLIST -> {
                     callbacks.createPlaylistFromAlbums(album)
                     return@OnMenuItemClickListener true
                 }
-                Defs.PLAYLIST_SELECTED -> {
+                PlaylistDefs.PLAYLIST_SELECTED -> {
                     callbacks.addAlbumsToPlaylist(item.intent.getSerializableExtra(PlaylistManager.ARG_PLAYLIST) as Playlist, album)
                     return@OnMenuItemClickListener true
                 }

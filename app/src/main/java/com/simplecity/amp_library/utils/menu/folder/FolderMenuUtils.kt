@@ -218,14 +218,14 @@ object FolderMenuUtils {
                     callbacks.playNext(getSongsForFolderObject(songsRepository, folderObject))
                     return@OnMenuItemClickListener true
                 }
-                Defs.NEW_PLAYLIST -> {
+                PlaylistDefs.NEW_PLAYLIST -> {
                     MenuUtils.newPlaylist(
                         fragment,
                         getSongsForFolderObject(songsRepository, folderObject)
                     )
                     return@OnMenuItemClickListener true
                 }
-                Defs.PLAYLIST_SELECTED -> {
+                PlaylistDefs.PLAYLIST_SELECTED -> {
                     getSongsForFolderObject(songsRepository, folderObject).subscribe { songs ->
                         MenuUtils.addToPlaylist(
                             playlistManager,
@@ -287,7 +287,7 @@ object FolderMenuUtils {
                         )
                     return@OnMenuItemClickListener true
                 }
-                Defs.NEW_PLAYLIST -> {
+                PlaylistDefs.NEW_PLAYLIST -> {
                     getSongForFile(songsRepository, fileObject).subscribe(
                         { song ->
                             CreatePlaylistDialog.newInstance(listOf(song)).show(fragment.childFragmentManager, "CreatePlaylistDialog")
@@ -296,7 +296,7 @@ object FolderMenuUtils {
                     )
                     return@OnMenuItemClickListener true
                 }
-                Defs.PLAYLIST_SELECTED -> {
+                PlaylistDefs.PLAYLIST_SELECTED -> {
                     getSongForFile(songsRepository, fileObject).subscribe({ song ->
                         MenuUtils.addToPlaylist(
                             playlistManager,

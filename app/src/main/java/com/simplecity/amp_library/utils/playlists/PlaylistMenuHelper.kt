@@ -33,11 +33,11 @@ class PlaylistMenuHelper @Inject constructor(
             .take(if (autoUpdate) java.lang.Long.MAX_VALUE else 1)
             .doOnNext { playlists ->
                 subMenu.clear()
-                subMenu.add(0, MediaManager.Defs.NEW_PLAYLIST, 0, R.string.new_playlist)
+                subMenu.add(0, MediaManager.PlaylistDefs.NEW_PLAYLIST, 0, R.string.new_playlist)
                 for (playlist in playlists) {
                     val intent = Intent()
                     intent.putExtra(PlaylistManager.ARG_PLAYLIST, playlist)
-                    subMenu.add(0, MediaManager.Defs.PLAYLIST_SELECTED, 0, playlist.name).intent = intent
+                    subMenu.add(0, MediaManager.PlaylistDefs.PLAYLIST_SELECTED, 0, playlist.name).intent = intent
                 }
             }
             .ignoreElements()

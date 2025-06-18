@@ -126,7 +126,7 @@ class QueueFragment :
         toolbar.setNavigationOnClickListener { v -> activity?.onBackPressed() }
         toolbar.inflateMenu(R.menu.menu_fragment_queue)
 
-        val subMenu = toolbar.menu.addSubMenu(0, Defs.ADD_TO_PLAYLIST, 1, R.string.save_as_playlist)
+        val subMenu = toolbar.menu.addSubMenu(0, PlaylistDefs.ADD_TO_PLAYLIST, 1, R.string.save_as_playlist)
         disposables.add(playlistMenuHelper.createUpdatingPlaylistMenu(subMenu).subscribe())
 
         toolbar.setOnMenuItemClickListener(toolbarListener)
@@ -239,11 +239,11 @@ class QueueFragment :
                 queuePresenter.clearQueue()
                 return@OnMenuItemClickListener true
             }
-            Defs.NEW_PLAYLIST -> {
+            PlaylistDefs.NEW_PLAYLIST -> {
                 queuePresenter.saveQueue(context!!)
                 return@OnMenuItemClickListener true
             }
-            Defs.PLAYLIST_SELECTED -> {
+            PlaylistDefs.PLAYLIST_SELECTED -> {
                 queuePresenter.saveQueue(context!!, item)
                 return@OnMenuItemClickListener true
             }

@@ -12,11 +12,11 @@ object GenreMenuUtils {
     fun getGenreClickListener(genre: Genre, callbacks: GenreMenuCallbacks): PopupMenu.OnMenuItemClickListener {
         return PopupMenu.OnMenuItemClickListener { item ->
             when (item.itemId) {
-                Defs.NEW_PLAYLIST -> {
+                PlaylistDefs.NEW_PLAYLIST -> {
                     callbacks.createPlaylist(genre)
                     return@OnMenuItemClickListener true
                 }
-                Defs.PLAYLIST_SELECTED -> {
+                PlaylistDefs.PLAYLIST_SELECTED -> {
                     callbacks.addToPlaylist(item.intent.getSerializableExtra(PlaylistManager.ARG_PLAYLIST) as Playlist, genre)
                     return@OnMenuItemClickListener true
                 }
