@@ -179,7 +179,7 @@ public class TaggerTask extends AsyncTask<Object, Integer, Boolean> {
             }
 
             if (skip) {
-                continue;
+                // rien à faire
             }
         }
 

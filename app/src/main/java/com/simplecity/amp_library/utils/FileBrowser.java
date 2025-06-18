@@ -51,7 +51,6 @@ public class FileBrowser {
 
         if (files != null) {
            for (File file : files) {
-    BaseFileObject baseFileObject;
 
     if (file.isDirectory()) {
         FolderObject folderObject = new FolderObject();
