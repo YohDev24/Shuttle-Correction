@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HttpServer {
-
+    private static final String MIME_TYPE_HTML = "text/html";
     private static final String TAG = "HttpServer";
 
     private static HttpServer sHttpServer;
@@ -83,7 +83,7 @@ public class HttpServer {
 
             if (audioFileToServe == null) {
                 Log.e(TAG, "Audio file to serve null");
-                return newFixedLengthResponse(Response.Status.NOT_FOUND, "text/html", "File not found");
+                return newFixedLengthResponse(Response.Status.NOT_FOUND, MIME_TYPE_HTML, "File not found");
             }
 
             String uri = session.getUri();
@@ -136,7 +136,7 @@ public class HttpServer {
                         response.addHeader("Content-Type", getMimeType(audioFileToServe));
                         return response;
                     } else {
-                        return newFixedLengthResponse(Response.Status.RANGE_NOT_SATISFIABLE, "text/html", range);
+                        return newFixedLengthResponse(Response.Status.RANGE_NOT_SATISFIABLE, MIME_TYPE_HTML, range);
                     }
                 } catch (IOException e) {
                     Log.e(TAG, "Error serving audio: " + e.getMessage());
@@ -144,7 +144,7 @@ public class HttpServer {
                 }
             } else if (uri.contains("image")) {
                 if (imageBytesToServe == null) {
-                    return newFixedLengthResponse(Response.Status.NOT_FOUND, "text/html", "Image bytes null");
+                    return newFixedLengthResponse(Response.Status.NOT_FOUND, MIME_TYPE_HTML, "Image bytes null");
                 }
                 cleanupImageStream();
                 imageInputStream = new ByteArrayInputStream(imageBytesToServe);
@@ -152,7 +152,7 @@ public class HttpServer {
                 return newFixedLengthResponse(Response.Status.OK, "image/png", imageInputStream, imageBytesToServe.length);
             }
             Log.e(TAG, "Returning NOT_FOUND response");
-            return newFixedLengthResponse(Response.Status.NOT_FOUND, "text/html", "File not found");
+            return newFixedLengthResponse(Response.Status.NOT_FOUND, MIME_TYPE_HTML, "File not found");
         }
     }
 

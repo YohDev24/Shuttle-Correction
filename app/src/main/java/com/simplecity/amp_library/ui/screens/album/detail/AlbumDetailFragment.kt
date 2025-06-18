@@ -417,6 +417,7 @@ class AlbumDetailFragment :
         }
 
         override fun onStartDrag(holder: SongView.ViewHolder) {
+            // Drag-and-drop not supported in this view
 
         }
     }
