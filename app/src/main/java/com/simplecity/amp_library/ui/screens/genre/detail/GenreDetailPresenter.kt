@@ -92,7 +92,7 @@ class GenreDetailPresenter @AssistedInject constructor(
     }
 
     fun loadData() {
-        PermissionUtils.requestStoragePermissions {
+        PermissionUtils.RequestStoragePermissions {
             addDisposable(
                 genre.getSongsObservable(context)
                     .zipWith<MutableList<Album>, Pair<MutableList<Album>, MutableList<Song>>>(
@@ -123,7 +123,7 @@ class GenreDetailPresenter @AssistedInject constructor(
             .delay(if (currentSlideShowAlbum == null) 0L else 8L, TimeUnit.SECONDS)
 
         addDisposable(Observable
-            .combineLatest(albumsObservable, timer, BiFunction { albums: List<Album>, aLong: Long -> albums })
+            .combineLatest(albumsObservable, timer, BiFunction { albums: List<Album>, _: Long -> albums })
             .map { albums ->
                 if (albums.isEmpty()) {
                     currentSlideShowAlbum

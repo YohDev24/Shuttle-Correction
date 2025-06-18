@@ -1,4 +1,4 @@
-package com.simplecity.amp_library.model;
+    package com.simplecity.amp_library.model;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -25,7 +25,7 @@ public class Album implements
     public long id;
     public String name;
 
-    public List<Artist> artists = new ArrayList<>();
+    private List<Artist> artists = new ArrayList<>();
     public String albumArtistName;
 
     public int year;
@@ -35,7 +35,7 @@ public class Album implements
     public long lastPlayed;
     public long dateAdded;
 
-    public List<String> paths = new ArrayList<>();
+    private List<String> paths = new ArrayList<>();
 
     public int songPlayCount;
 
