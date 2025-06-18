@@ -302,7 +302,7 @@ public class ColorHelper {
          * @param outLab 3-element array which holds the resulting LAB components
          */
         static void colorToLAB(@ColorInt int color, @NonNull double[] outLab) {
-            RGBToLAB(Color.red(color), Color.green(color), Color.blue(color), outLab);
+            rgbToLab(Color.red(color), Color.green(color), Color.blue(color), outLab);
         }
 
         /**
@@ -319,7 +319,7 @@ public class ColorHelper {
          * @param b      blue component value [0..255]
          * @param outLab 3-element array which holds the resulting LAB components
          */
-        static void RGBToLAB(@IntRange(from = 0x0, to = 0xFF) int r,
+        static void rgbToLab(@IntRange(from = 0x0, to = 0xFF) int r,
                 @IntRange(from = 0x0, to = 0xFF) int g, @IntRange(from = 0x0, to = 0xFF) int b,
                 @NonNull double[] outLab) {
             // First we convert RGB to XYZ
