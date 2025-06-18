@@ -178,8 +178,8 @@ public class HttpServer {
     {
         Map<String, String> types = new HashMap<>();
         types.put("css", "text/css");
-        types.put("htm", "text/html");
-        types.put("html", "text/html");
+        types.put("htm", MIME_TYPE_HTML);
+        types.put("html", MIME_TYPE_HTML);
         types.put("xml", "text/xml");
         types.put("java", "text/x-java-source, text/java");
         types.put("md", "text/plain");

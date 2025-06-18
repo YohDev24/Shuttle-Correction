@@ -21,6 +21,10 @@ import android.content.res.Configuration;
 
 public class CarHelper {
 
+    private CarHelper() {
+            // Utility class: prevent instantiation
+        }
+
     private static final String TAG = "CarHelper";
 
     public static boolean isCarUiMode(Context c) {

@@ -46,7 +46,7 @@ class GenreListFragment :
     @Inject lateinit var presenter: GenreListPresenter
 
     @Inject lateinit var playlistMenuHelper: PlaylistMenuHelper
-
+    @FunctionalInterface 
     interface GenreClickListener {
         fun onGenreClicked(genre: Genre)
     }
