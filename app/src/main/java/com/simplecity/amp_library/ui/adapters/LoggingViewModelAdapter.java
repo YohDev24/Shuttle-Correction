@@ -11,7 +11,7 @@ import java.util.List;
 
 public class LoggingViewModelAdapter extends ViewModelAdapter {
 
-      private static final String tag = "LoggingVMAdapter";
+    private  String tag = "LoggingVMAdapter";
 
 
     public LoggingViewModelAdapter(String tag) {

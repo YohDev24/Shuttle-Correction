@@ -295,14 +295,15 @@ class AlbumListFragment :
         // Note: For album-shuffle mode, we don't actually turn shuffle on.
         mediaManager.shuffleMode = QueueManager.ShuffleMode.OFF
 
-        mediaManager.playAll(
-            songsRepository.getSongs(null as Function1<Song, Boolean?>)
-                .firstOrError()
-                .map { songs -> Operators.albumShuffleSongs(songs, sortManager) }
-                .doOnError {
-                    Toast.makeText(context, "Playback failed", Toast.LENGTH_SHORT).show()
-                }
-        )
+    mediaManager.playAll(
+        songsRepository.getSongs(null)
+        .firstOrError()
+        .map { songs -> Operators.albumShuffleSongs(songs, sortManager) }
+        .doOnError {
+            Toast.makeText(context, "Playback failed", Toast.LENGTH_SHORT).show()
+        }
+)
+
     }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
