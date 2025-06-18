@@ -173,15 +173,13 @@ public class TaggerTask extends AsyncTask<Object, Integer, Boolean> {
                     for (int j = tempFiles.size() - 1; j >= 0; j--) {
                         File file = tempFiles.get(j);
                         file.delete();
-                        // noinspection SuspiciousListRemoveInLoop
-
                         tempFiles.remove(j);
                     }
                 }
             }
 
             if (skip) {
-                // rien à faire
+    // rien à faire
             }
         }
 
