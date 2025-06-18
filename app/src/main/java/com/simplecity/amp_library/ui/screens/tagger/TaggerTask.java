@@ -94,74 +94,84 @@ public class TaggerTask extends AsyncTask<Object, Integer, Boolean> {
 
         boolean shouldStop = false;
 
-        for (int i = 0; i < paths.size() && !shouldStop; i++) {
+        boolean shouldProcess = true;
+
+        for (int i = 0; i < paths.size() && shouldProcess; i++) {
             final String path = paths.get(i);
+            boolean skipIteration = false;
+
             try {
                 File orig = new File(path);
                 AudioFile audioFile = AudioFileIO.read(orig);
                 Tag tag = audioFile.getTag();
                 if (tag == null) {
-                    shouldStop = true;
-                    continue;
+                    shouldProcess = false;
+                    skipIteration = true;
                 }
 
-                TagUpdate tagUpdate = new TagUpdate(tag);
-                tagUpdate.softSetArtist(artistText);
-                tagUpdate.softSetAlbumArtist(albumArtistText);
-                tagUpdate.softSetGenre(genreText);
-                tagUpdate.softSetYear(yearText);
+                if (!skipIteration) {
+                    TagUpdate tagUpdate = new TagUpdate(tag);
+                    tagUpdate.softSetArtist(artistText);
+                    tagUpdate.softSetAlbumArtist(albumArtistText);
+                    tagUpdate.softSetGenre(genreText);
+                    tagUpdate.softSetYear(yearText);
 
-                if (showAlbum) {
-                    tagUpdate.softSetAlbum(albumText);
-                    tagUpdate.softSetDiscTotal(discTotalText);
-                }
+                    if (showAlbum) {
+                        tagUpdate.softSetAlbum(albumText);
+                        tagUpdate.softSetDiscTotal(discTotalText);
+                    }
 
-                if (showTrack) {
-                    tagUpdate.softSetTitle(titleText);
-                    tagUpdate.softSetTrack(trackText);
-                    tagUpdate.softSetTrackTotal(trackTotalText);
-                    tagUpdate.softSetDisc(discText);
-                    tagUpdate.softSetLyrics(lyricsText);
-                    tagUpdate.softSetComment(commentText);
-                }
+                    if (showTrack) {
+                        tagUpdate.softSetTitle(titleText);
+                        tagUpdate.softSetTrack(trackText);
+                        tagUpdate.softSetTrackTotal(trackTotalText);
+                        tagUpdate.softSetDisc(discText);
+                        tagUpdate.softSetLyrics(lyricsText);
+                        tagUpdate.softSetComment(commentText);
+                    }
 
-                File temp = null;
-                if (tagUpdate.hasChanged()) {
-                    if (TaggerUtils.requiresPermission(applicationContext, paths)) {
-                        temp = new File(applicationContext.getFilesDir(), orig.getName());
-                        tempFiles.add(temp);
-                        TaggerUtils.copyFile(orig, temp);
+                    File temp = null;
+                    if (tagUpdate.hasChanged()) {
+                        if (TaggerUtils.requiresPermission(applicationContext, paths)) {
+                            temp = new File(applicationContext.getFilesDir(), orig.getName());
+                            tempFiles.add(temp);
+                            TaggerUtils.copyFile(orig, temp);
 
-                        audioFile = AudioFileIO.read(temp);
-                        tag = audioFile.getTag();
-                        if (tag == null) {
-                            shouldStop = true;
-                            continue;
+                            audioFile = AudioFileIO.read(temp);
+                            tag = audioFile.getTag();
+                            if (tag == null) {
+                                shouldProcess = false;
+                                skipIteration = true;
+                            }
+                        }
+
+                        if (!skipIteration) {
+                            tagUpdate.updateTag(tag);
+                            AudioFileIO.write(audioFile);
+
+                            if (requiresPermission && temp != null) {
+                                DocumentFile documentFile = documentFiles.get(i);
+                                if (documentFile != null) {
+                                    ParcelFileDescriptor pfd = applicationContext.getContentResolver()
+                                        .openFileDescriptor(documentFile.getUri(), "w");
+                                    if (pfd != null) {
+                                        FileOutputStream fileOutputStream = new FileOutputStream(pfd.getFileDescriptor());
+                                        TaggerUtils.copyFile(temp, fileOutputStream);
+                                        pfd.close();
+                                    }
+                                    if (temp.delete() && tempFiles.contains(temp)) {
+                                        tempFiles.remove(temp);
+                                    }
+                                }
+                            }
                         }
                     }
 
-                    tagUpdate.updateTag(tag);
-                    AudioFileIO.write(audioFile);
-
-                    if (requiresPermission && temp != null) {
-                        DocumentFile documentFile = documentFiles.get(i);
-                        if (documentFile != null) {
-                            ParcelFileDescriptor pfd = applicationContext.getContentResolver()
-                                    .openFileDescriptor(documentFile.getUri(), "w");
-                            if (pfd != null) {
-                                FileOutputStream fileOutputStream = new FileOutputStream(pfd.getFileDescriptor());
-                                TaggerUtils.copyFile(temp, fileOutputStream);
-                                pfd.close();
-                            }
-                            if (temp.delete() && tempFiles.contains(temp)) {
-                                tempFiles.remove(temp);
-                            }
-                        }
+                    if (!skipIteration) {
+                        publishProgress(i);
+                        success = true;
                     }
                 }
-
-                publishProgress(i);
-                success = true;
             } catch (CannotWriteException | IOException | CannotReadException |
                     InvalidAudioFrameException | TagException | ReadOnlyFileException e) {
                 e.printStackTrace();
@@ -175,6 +185,7 @@ public class TaggerTask extends AsyncTask<Object, Integer, Boolean> {
                 }
             }
         }
+
 
         return success;
     }
