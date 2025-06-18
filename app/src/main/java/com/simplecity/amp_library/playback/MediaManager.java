@@ -28,14 +28,11 @@ import org.jetbrains.annotations.NotNull;
 
 public class MediaManager {
 
-   public final class PlaylistDefs {
-    public static final int ADD_TO_PLAYLIST = 0;
-    public static final int PLAYLIST_SELECTED = 1;
-    public static final int NEW_PLAYLIST = 2;
+    public interface Defs {
 
-    private PlaylistDefs() {
-        // Prevent instantiation
-    }
+        int ADD_TO_PLAYLIST = 0;
+        int PLAYLIST_SELECTED = 1;
+        int NEW_PLAYLIST = 2;
     }
 
     private AnalyticsManager analyticsManager;
@@ -66,7 +63,7 @@ public class MediaManager {
             setShuffleMode(QueueManager.ShuffleMode.OFF);
         }
 
-        if (songs.isEmpty()
+        if (songs.
                 || MusicServiceConnectionUtils.serviceBinder == null
                 || MusicServiceConnectionUtils.serviceBinder.getService() == null) {
 
