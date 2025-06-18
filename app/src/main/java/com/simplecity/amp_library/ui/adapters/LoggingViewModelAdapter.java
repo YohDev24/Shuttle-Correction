@@ -11,38 +11,36 @@ import java.util.List;
 
 public class LoggingViewModelAdapter extends ViewModelAdapter {
 
-    private static String TAG = "LoggingVMAdapter";
+      private static final String tag = "LoggingVMAdapter";
 
 
-    public LoggingViewModelAdapter(String TAG) {
-        this.TAG = TAG;
+    public LoggingViewModelAdapter(String tag) {
+        this.tag = tag;
     }
 
     @Nullable
     @Override
     public synchronized Disposable setItems(List<ViewModel> items, @Nullable CompletionListUpdateCallback callback) {
 
-        Crashlytics.log(Log.DEBUG, TAG, String.format("setItems called for: '%s'", TAG));
+        Crashlytics.log(Log.DEBUG, TAG, String.format("setItems called for: '%s'", tag));
 
         return super.setItems(items, new CompletionListUpdateCallback() {
 
             @Override
             public void onComplete() {
 
-                Crashlytics.log(Log.DEBUG, TAG, String.format("setItems complete for: '%s'. Dispatching updates.", TAG));
+                Crashlytics.log(Log.DEBUG, TAG, String.format("setItems complete for: '%s'. Dispatching updates.", tag));
 
                 if (callback != null) {
                     callback.onComplete();
                 }
             }
-
             @Override
             public void onInserted(int position, int count) {
                 if (callback != null) {
                     callback.onInserted(position, count);
                 }
             }
-
             @Override
             public void onRemoved(int position, int count) {
                 if (callback != null) {
